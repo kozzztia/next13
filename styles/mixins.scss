@@ -1,0 +1,17 @@
+
+@mixin layout(){
+  padding: 10px;
+  background: rgba(87, 87, 87, 0.5);
+  margin : 0 auto;
+  max-width: 1440px;
+}
+
+@mixin listWrapperFlex($direction,$content,$items,$wrap : no-wrap){
+  width: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $content;
+  align-items: $items;
+  flex-wrap: $wrap;
+}

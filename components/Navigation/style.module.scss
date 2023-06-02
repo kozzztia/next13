@@ -1,0 +1,11 @@
+@import "@/styles/mixins";
+
+.navigation {
+  @include layout();
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  background: rgba(184, 230, 255, 0.42);
+  min-height: 100%;
+}

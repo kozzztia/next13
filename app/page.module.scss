@@ -1,0 +1,8 @@
+@import "@/styles/mixins";
+
+.main {
+  @include layout();
+  background: rgba(184, 230, 255, 0.42);
+  min-height: 100%;
+}
+
