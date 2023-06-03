@@ -1,0 +1,6 @@
+@import "@/styles/mixins";
+
+  .mainePage{
+    @include layout;
+    background: #868484;
+  }

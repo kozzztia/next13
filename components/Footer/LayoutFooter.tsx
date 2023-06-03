@@ -6,7 +6,7 @@ import style from "@/components/Footer/style.module.scss";
 const LayoutFooter= () => {
     return (
         <header className={classNames(style.layoutFooter)}>
-            hello am header
+            hello am footer
         </header>
     );
 };
