@@ -1,5 +1,5 @@
 
-let idNumber = 0
+let idNumber = 10
 
 const decrementedId = (number : number) =>{
     return number + 1
