@@ -25,7 +25,19 @@ const Page = () => {
 
     const [inputValue , setInputValue] = useState<string>("");
 
-    const getTodos = async () =>{
+    const getTodoById = async () =>{
+        const res = await axios.get('http://localhost:3000/api/todos?id=1')
+        return res.data
+    }
+    const getTodoByTask = async () =>{
+        const res = await axios.get('http://localhost:3000/api/todos?task=task2')
+        return res.data
+    }
+    const getTodoByIsDone = async () =>{
+        const res = await axios.get('http://localhost:3000/api/todos?done=false')
+        return res.data
+    }
+    const getAllTodos = async () =>{
         const res = await axios.get('http://localhost:3000/api/todos')
         return res.data
     }
@@ -34,7 +46,10 @@ const Page = () => {
 
 
     useEffect(()=>{
-        getTodos().then(data => console.log(data))
+        getAllTodos().then(data=> console.log("all: " , data))
+        getTodoById().then(data => console.log("id: " , data))
+        getTodoByTask().then(data => console.log("task: " , data))
+        getTodoByIsDone().then(data => console.log("done :" , data))
     },[])
     return (
         <div className={classNames(style.todosPage)}>
