@@ -7,58 +7,55 @@ import {addTodo, changeIsDone, deleteTodo} from "@/redux/features/todosSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import ListWrapper from "@/components/ListWrapper/ListWrapper";
 import {createTodoId} from "@/helpers/createTodoId";
-import TodoItem from "@/components/TodoItem/TodoItem";
 import axios from "axios";
-import {NextResponse} from "next/server";
 
+
+const todoUrl = "http://localhost:3000/api/todos"
+const getTodoById = async () =>{
+    const res = await axios.get(`${todoUrl}?id=1`)
+    return res.data
+}
+const getTodoByTask = async () =>{
+    const res = await axios.get(`${todoUrl}?task=task2`)
+    return res.data
+}
+const getTodoByIsDone = async () =>{
+    const res = await axios.get(`${todoUrl}?done=false`)
+    return res.data
+}
+const getAllTodos = async () =>{
+    const res = await axios.get(`${todoUrl}`)
+    return res.data
+}
+
+const postTodo = async (value : string)=>{
+    const res = await axios.post(`${todoUrl}` , {
+        value
+    })
+    return res.data
+}
+
+const removeTodo = async (id : number)=>{
+    const res = await axios.delete(`${todoUrl}?deleteId=${id}`)
+    return res.data
+}
 
 
 const Page = () => {
-
-
-    const todos = useAppSelector((state) => state.todosReducer.todos);
-    const dispatch = useAppDispatch();
-    // useEffect(()=>{
-    //     console.log(todos)
-    // },[todos])
-
-
     const [inputValue , setInputValue] = useState<string>("");
-
-    const getTodoById = async () =>{
-        const res = await axios.get('http://localhost:3000/api/todos?id=1')
-        return res.data
-    }
-    const getTodoByTask = async () =>{
-        const res = await axios.get('http://localhost:3000/api/todos?task=task2')
-        return res.data
-    }
-    const getTodoByIsDone = async () =>{
-        const res = await axios.get('http://localhost:3000/api/todos?done=false')
-        return res.data
-    }
-    const getAllTodos = async () =>{
-        const res = await axios.get('http://localhost:3000/api/todos')
-        return res.data
-    }
-
-
-
+    const [todos , setTodos] = useState<{id :number , done : false , task : string}[]|[]>([])
 
     useEffect(()=>{
-        getAllTodos().then(data=> console.log("all: " , data))
-        getTodoById().then(data => console.log("id: " , data))
-        getTodoByTask().then(data => console.log("task: " , data))
-        getTodoByIsDone().then(data => console.log("done :" , data))
+        getAllTodos().then(res=> setTodos(res))
     },[])
     return (
         <div className={classNames(style.todosPage)}>
-
             <form
-                onSubmit={ (e)=>{
-                     e.preventDefault();
-                     dispatch(addTodo({id:createTodoId() ,task: inputValue, isDone: false}))
-                     setInputValue("");
+                onSubmit={ async (e)=>{
+                    await e.preventDefault();
+                    await postTodo(inputValue).then(r => console.log("post:" , r));
+                    await getAllTodos().then(res=> setTodos(res));
+                    await setInputValue("");
                 }}
             >
                 <input
@@ -72,13 +69,20 @@ const Page = () => {
             </form>
 
             <ListWrapper>
-                {todos.length >= 1?todos.map(item =>
-                    // <button key={item.id} onClick={(e)=>dispatch(deleteTodo(item.id))}>{item.task}</button>
-                    <input key={item.id} type={"checkbox"} onChange={()=>dispatch(changeIsDone(item.id))} checked={item.isDone}/>
+                {
+                    todos?todos.map(item => <p key={item.id}><span>{item.task}</span>
+                        <input type={'checkbox'} checked={item.done} onChange={(e)=>{console.log(e.target)}}/>
+                        <button onClick={async (e)=>{
+                            await e.preventDefault();
+                            await removeTodo(item.id).then(res => console.log(res));
+                            await getAllTodos().then(res => setTodos(res))
 
-                    )
-                    :
-                    <p>Empty</p>}
+                        }}
+                        >X</button>
+                    </p>)
+                        :
+                        <p>Loading...................</p>
+                }
             </ListWrapper>
         </div>
     );
