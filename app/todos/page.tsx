@@ -3,10 +3,9 @@ import React, {memo, useEffect, useState} from 'react';
 import style from "./style.module.scss";
 import {classNames} from "@/helpers/classNames";
 
-import {addTodo, changeIsDone, deleteTodo} from "@/redux/features/todosSlice";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+
 import ListWrapper from "@/components/ListWrapper/ListWrapper";
-import {createTodoId} from "@/helpers/createTodoId";
+
 import axios from "axios";
 
 

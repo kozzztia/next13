@@ -48,8 +48,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<{
 
 
                fs.writeFile("./pages/api/data//test.json" ,
-                   // JSON.stringify([...todos , {task : todo , id : todos.at(-1).id +2, done : false}]) , (err) =>{
-                   JSON.stringify([...todos , {task : todo , id : createTodoId(), done : false}]) , (err) =>{
+                   JSON.stringify([...todos , {task : todo , id : createTodoId(todos.length), done : false}]) , (err) =>{
                    if(err) throw err
                    res.status(200).json("done")
                })
@@ -60,7 +59,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<{
             return fs.readFile("./pages/api/data//test.json" , "utf8" , (err, data) => {
                 if (err) throw err;
                 let todos = JSON.parse(data)
-                const filterTodos = todos.filter(item => item.id !== req.query.deleteId)
+                const filterTodos = todos.filter(item => item.id !== Number(req.query.deleteId))
                 return fs.writeFile("./pages/api/data//test.json" ,
                     JSON.stringify([...filterTodos]) , (err) =>{
                         if(err) throw err
